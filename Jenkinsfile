@@ -8,7 +8,7 @@ pipeline {
         choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
         password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     }
-    triggers { pollSCM('*/1 * * * *') }
+    triggers { pollSCM('* */4 * * *') }
     environment {
         ENV_URL = "pipeline.google.com"
         ACCESS_KEY = credentials('AWS_ACCESS_KEY')
@@ -19,16 +19,16 @@ pipeline {
         disableConcurrentBuilds()
         timeout(time: 1, unit: 'MINUTES')
     }
-    // tools {
-    //         maven 'maven-3.5.0' 
-    //     }
+    tools {
+            maven 'maven-3.5.0' 
+        }
     stages {
         stage('Parallel Stage') {
             parallel {
             stage('First Stage Name') {
                 steps {
                     sh "hostname"   // I want this job to run this on WS
-                    // sh 'mvn --version'
+                    sh 'mvn --version'
                     sh "echo One"
                     sh "env"
                     sh "sleep 10"
